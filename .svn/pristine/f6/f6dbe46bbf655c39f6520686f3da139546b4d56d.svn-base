@@ -1,0 +1,17 @@
+package com.tvscs.lms.service;
+
+import java.util.List;
+
+import com.tvscs.lms.model.User;
+
+public interface IUserService {
+   public User getEmployeeById(Integer userId);
+   public boolean isUserExist(String userId);
+   public List<User> findByJoiningDate(String joiningDate, int pageNum,int pageSize);
+   public List<User> findByRegion(String region, int pageNum,int pageSize);
+   public List<User> findByDepartment(String department, int pageNum,int pageSize);
+   public List<User> findByLocation(String location, int pageNum,int pageSize);
+   public List<User> findByManagerId(Integer managerId, int pageNum,int pagesize);
+   public List<User> getEmployeesById(List<Integer> empIdList);
+   public List<User> getAllEmployees(int pageNum,int pagesize);
+}

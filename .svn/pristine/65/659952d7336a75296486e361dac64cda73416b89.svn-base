@@ -1,0 +1,32 @@
+package com.tvscs.lms.repo;
+
+import java.sql.Date;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.tvscs.lms.model.User;
+
+/**
+ * @author 5030618
+ *
+ */
+public interface UserRepository extends JpaRepository<User, String> {
+	
+	public Page<User> findByJoiningDate(Date joiningDate, Pageable pageable);
+	public Page<User> findByRegion(String region, Pageable pageable);
+	public Page<User> findByDepartment(String department, Pageable pageable);
+	public Page<User> findByLocation(String location, Pageable pageable);
+	public Page<User> findByManagerId(String managerId, Pageable pageable);
+	public Page<User> findAll(Pageable pageable);
+	/**
+	 * To get Employee Ids in the particular department to fetch thier 
+	 * performance 
+	 *
+	 */
+	@Query(" select emp.empId from User emp where emp.department = :department")
+	public List<String> getEmployeeIdsByDepartment(String department);
+}

@@ -1,0 +1,231 @@
+package com.tvscs.lms.controller;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.tvscs.lms.error.EmployeeNotFoundException;
+import com.tvscs.lms.error.InvalidAccessKeyException;
+import com.tvscs.lms.model.User;
+import com.tvscs.lms.service.IUserService;
+import com.tvscs.lms.util.DataValidator;
+import com.tvscs.lms.util.StatusCodes;
+
+
+/**
+ * @author 5030618
+ *
+ */
+@RestController
+@RequestMapping("/employee")
+public class UserController {
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
+
+	@Autowired
+	private IUserService service;
+
+	/**
+	 * To get the Employee data based on the empId
+	 */
+	@GetMapping("/get/{empId}")
+	public ResponseEntity<?> getEmployeeById(@PathVariable Integer empId) {
+		ResponseEntity<?> resEntity = null;
+		User user = null;
+		try {
+			logger.info("User accessing /get end point.");
+			user = service.getEmployeeById(empId);
+			resEntity = new ResponseEntity<User>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Error in getEmployeeById()"+e);
+			throw new EmployeeNotFoundException(empId.toString());
+		}
+		return resEntity;
+	}
+	/**
+	 * To fetch Employees data by joining Date 
+	 *
+	 */
+	@GetMapping(path = {"/doj/{joiningDate}/{pageNumOpt}/{pageSizeOpt}",
+	"/doj/{joiningDate}"})
+	public ResponseEntity<?> getEmployeesByJoiningDate(@PathVariable String joiningDate,
+			@PathVariable Optional<Integer> pageNumOpt, 
+			@PathVariable Optional<Integer> pageSizeOpt){
+		ResponseEntity<?> resEntity = null;
+		List<User> users = null;
+		try{
+			logger.info("User accessing /doj end point.");
+			if (pageNumOpt.isPresent() && pageSizeOpt.isPresent()) {
+				users = service.findByJoiningDate(joiningDate, pageNumOpt.get(), pageSizeOpt.get());
+			} else {
+				users = service.findByJoiningDate(joiningDate, new Integer(0), new Integer(10));
+			}
+			resEntity = new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		} catch(Exception e){
+			logger.error("Error in getEmployeesByJoiningDate()",
+					StatusCodes.INVALID_ACCESS_KEY,HttpStatus.UNAUTHORIZED);
+			throw new InvalidAccessKeyException(StatusCodes.INVALID_ACCESS_KEY);
+		}
+		return resEntity;
+	}
+
+	/**
+	 * To fetch Employees data of all the employees in a department
+	 *
+	 */
+	@GetMapping(path = {"/division/{department}/{pageNumOpt}/{pageSizeOpt}/{accessKey}",
+	"/division/{department}/{accessKey}"})
+	public ResponseEntity<?> getEmployeesByDepartment(@PathVariable String department, 
+			@PathVariable Optional<Integer> pageNumOpt, 
+			@PathVariable Optional<Integer> pageSizeOpt, @PathVariable String accessKey){
+		ResponseEntity<?> resEntity = null;
+		List<User> users = null;
+		if(DataValidator.authenticateRequest(accessKey)) {
+			logger.info("User accessing /divison end point.");
+			if (pageNumOpt.isPresent() && pageSizeOpt.isPresent()) {
+				users = service.findByDepartment(department, pageNumOpt.get(), pageSizeOpt.get());
+			} else {
+				users = service.findByDepartment(department, new Integer(0), new Integer(10));
+			}
+			resEntity = new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		}else {
+			logger.error("Error in getEmployeesByDepartment()",
+					StatusCodes.INVALID_ACCESS_KEY,HttpStatus.UNAUTHORIZED);
+			throw new InvalidAccessKeyException(StatusCodes.INVALID_ACCESS_KEY);
+		}
+		return resEntity;
+
+	}
+
+	/**
+	 * To fetch Employees data in a region
+	 *
+	 */
+	@GetMapping(path = {"/bulk/{region}/{pageNumOpt}/{pageSizeOpt}/{accessKey}",
+	"/bulk/{region}/{accessKey}"})
+	public ResponseEntity<?> getEmployeesByRegion(@PathVariable String region, 
+			@PathVariable Optional<Integer> pageNumOpt, 
+			@PathVariable Optional<Integer> pageSizeOpt, @PathVariable String accessKey){
+		ResponseEntity<?> resEntity = null;
+		List<User> users = null;
+		if(DataValidator.authenticateRequest(accessKey)) {
+			logger.info("User accessing /bulk end point.");
+			if (pageNumOpt.isPresent() && pageSizeOpt.isPresent()) {
+				users = service.findByRegion(region, pageNumOpt.get(),pageSizeOpt.get());
+			} else {
+				users = service.findByRegion(region, new Integer(0), new Integer(10));
+			}
+			resEntity = new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		}else {
+			logger.error("Error in getEmployeesByRegion()", 
+					StatusCodes.INVALID_ACCESS_KEY,HttpStatus.UNAUTHORIZED);
+			throw new InvalidAccessKeyException(StatusCodes.INVALID_ACCESS_KEY);
+		}
+		return resEntity;
+	}
+
+	/**
+	 * To fetch Employees data based on location 
+	 *
+	 */
+	@GetMapping(path = {"/location/{city}/{pageNumOpt}/{pageSizeOpt}/{accessKey}",
+	"/location/{city}/{accessKey}"})
+	public ResponseEntity<?> getEmployeesByLocation(@PathVariable String city, 
+			@PathVariable Optional<Integer> pageNumOpt, 
+			@PathVariable Optional<Integer> pageSizeOpt,
+			@PathVariable String accessKey){
+		ResponseEntity<?> resEntity = null;
+		List<User> users = null;
+		if(DataValidator.authenticateRequest(accessKey)) {
+			logger.info("User accessing /location end point.");
+			if (pageNumOpt.isPresent() && pageSizeOpt.isPresent()) {
+				users = service.findByLocation(city, pageNumOpt.get(),pageSizeOpt.get());
+			} else {
+				users  = service.findByLocation(city, new Integer(0), new Integer(10));
+			}
+			resEntity = new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		}else {
+			logger.error("Error in getEmployeesByLocation()", 
+					StatusCodes.INVALID_ACCESS_KEY,HttpStatus.UNAUTHORIZED);
+			throw new InvalidAccessKeyException(StatusCodes.INVALID_ACCESS_KEY);
+		}
+		return resEntity;
+	}
+
+	/**
+	 * To fetch data of employees under a manager
+	 *
+	 */
+	@GetMapping(path = {"/head/{managerId}/{pageNumOpt}/{pageSizeOpt}/{accessKey}", 
+	"head/{managerId}/{accessKey}"})
+	public ResponseEntity<?> getEmployeesByManagerId(@PathVariable Integer managerId, 
+			@PathVariable Optional<Integer> pageNumOpt, 
+			@PathVariable Optional<Integer> pageSizeOpt,
+			@PathVariable String accessKey){
+		ResponseEntity<?> resEntity = null;
+		List<User> users = null;
+		if(DataValidator.authenticateRequest(accessKey)) {
+			logger.info("User accessing /head end point.");
+			if (pageNumOpt.isPresent() && pageSizeOpt.isPresent()) {
+				users = service.findByManagerId(managerId, pageNumOpt.get(), pageSizeOpt.get());
+			}else {
+				users = service.findByManagerId(managerId, new Integer(0), new Integer(10));
+			}
+			resEntity = new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		}else {
+			logger.error("Error in getEmployeesByManagerId()",
+					StatusCodes.INVALID_ACCESS_KEY,HttpStatus.UNAUTHORIZED);
+			throw new InvalidAccessKeyException(StatusCodes.INVALID_ACCESS_KEY);
+		}
+		return resEntity;
+	}
+
+	/**
+	 * To fetch Employees data with employee id list
+	 *
+	 */
+	@GetMapping("/group/{empIds}/{accessKey}")
+	public ResponseEntity<?> getEmployeesById(@PathVariable Integer[] empIds, @PathVariable String accessKey) {
+		ResponseEntity<?> resEntity = null;
+		List<User> usersList = null;
+		if(DataValidator.authenticateRequest(accessKey)) {
+			logger.info("User accessing /group end point.");
+			usersList = service.getEmployeesById(Arrays.asList(empIds));
+			resEntity = new ResponseEntity<List<User>>(usersList, HttpStatus.OK);
+		}else {
+			logger.error("Error in getEmployeesById()", 
+					StatusCodes.INVALID_ACCESS_KEY,HttpStatus.UNAUTHORIZED);
+			throw new InvalidAccessKeyException(StatusCodes.INVALID_ACCESS_KEY);
+		}
+		return resEntity;
+	}
+	@GetMapping(path = {"/all/{accessKey}","/all/{pageNumOpt}/{pageSizeOpt}/{accessKey}"})
+	public ResponseEntity<?> getAllEmployees(@PathVariable Optional<Integer> pageNumOpt, 
+			@PathVariable Optional<Integer> pageSizeOpt,@PathVariable String accessKey){
+		ResponseEntity<?> resEntity = null;
+		List<User> users = null;
+		if(DataValidator.authenticateRequest(accessKey)) {
+			logger.info("User accessing /all end point.");
+			if (pageNumOpt.isPresent() && pageSizeOpt.isPresent()) {
+				users = service.getAllEmployees(pageNumOpt.get(), pageSizeOpt.get());
+			}else {
+				users = service.getAllEmployees(new Integer(0), new Integer(10));
+			}
+			resEntity = new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		}else {
+			logger.error("Error in getAllEmployees()",
+					StatusCodes.INVALID_ACCESS_KEY,HttpStatus.UNAUTHORIZED);
+			throw new InvalidAccessKeyException(StatusCodes.INVALID_ACCESS_KEY);
+		}
+		return resEntity;
+	}
+}

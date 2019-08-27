@@ -1,0 +1,31 @@
+#Performance module datasource properties
+spring.performance.datasource.jdbc-url =jdbc:oracle:thin:@//172.16.80.74:1521/RPTDB
+spring.performance.datasource.username =VK_5030618
+spring.performance.datasource.password =VK_5030618
+#spring.performance.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
+
+#Hr module datasource properties
+spring.employee.datasource.jdbc-url =jdbc:oracle:thin:@//172.16.80.137:1521/LMSDBUAT
+spring.employee.datasource.username =HRUSR
+spring.employee.datasource.password =HRUSR#
+#spring.employee.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
+
+#JPA Properties
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle12cDialect
+
+## Hazelcast
+server.port=8899
+server.servlet.context-path=/lmsautomation
+
+
+##jwt.secret=tvscs
+
+
+
+
+
+
+
+

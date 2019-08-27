@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "spring.performance.datasource.jdbc-url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.performance.datasource.jdbc-url'"
+  },
+  {
+    "name": "spring.performance.datasource.username",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.performance.datasource.username'"
+  },
+  {
+    "name": "spring.performance.datasource.password",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.performance.datasource.password'"
+  },
+  {
+    "name": "spring.employee.datasource.jdbc-url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.employee.datasource.jdbc-url'"
+  },
+  {
+    "name": "spring.employee.datasource.username",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.employee.datasource.username'"
+  },
+  {
+    "name": "spring.employee.datasource.password",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.employee.datasource.password'"
+  }
+]}
