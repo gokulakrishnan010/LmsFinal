@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.tvscs.lms.model.Employee;
-import com.tvscs.lms.model.Performance;
+import com.tvscs.lms.performance.model.Employee;
+import com.tvscs.lms.performance.model.Performance;
 
 /**
  * @author 5030618

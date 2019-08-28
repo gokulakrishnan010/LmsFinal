@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.tvscs.lms.model.CustomErrorResponse;
+import com.tvscs.lms.performance.model.CustomErrorResponse;
 import com.tvscs.lms.util.StatusCodes;
 
 
