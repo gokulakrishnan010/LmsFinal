@@ -1,4 +1,4 @@
-package com.tvscs.lms.employee.service;
+package com.tvscs.lms.service;
 
 import java.util.Date;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.tvscs.lms.employee.model.UserModel;
+import com.tvscs.lms.model.UserModel;
 
 public interface UserService {
 

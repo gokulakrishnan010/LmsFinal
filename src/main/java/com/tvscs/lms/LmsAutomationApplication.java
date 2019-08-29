@@ -6,15 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.ComponentScan;
 
 import com.tvscs.service.utill.ServiceKeyCodes;
-
-
-//@ComponentScan(basePackages = "com.tvscs.lms.*")
-@SpringBootApplication(scanBasePackages= {"com.tvscs.lms.*","com.tvscs.lms.employee.*"})
-@EnableCaching
+@SpringBootApplication(scanBasePackages={"com.tvscs.lms.*"})
 public class LmsAutomationApplication extends SpringBootServletInitializer{
 
 	public static void main(String[] args) {
